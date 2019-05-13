@@ -66,11 +66,20 @@ function AddUser(id, name, date) {
 
     //console.log("AddUser");
 
-    code = $('<div class="box-comment" id="Div' + id + '">' +
-        ' <div class="comment-text">' +
-        '<span class="username">' + '<a id="' + name + '" class="user" >' + name + '<a>' +
-        '<span class="text-muted pull-right">' + date + '</span>  </span></div></div>');
+    let thisName = $("#username").attr('data-value');
+
+    if (thisName == name) {
+
+        code = $('<div class="box-comment" id="Div' + id + '">' +
+            ' <div class="list-group-item">' +
+            '<span class="username">' + name + '</span >'+
+            '<span class="text-muted pull-right">' + date + '</span></div></div>');
+    } else {
+        code = $('<div class="box-comment" id="Div' + id + '">' +
+            ' <div class="list-group-item list-group-item-action">' +
+            '<span class="username">' + '<a href="#"id="' + name + '" class="user" >' + name + '<a>' +
+            '<span class="text-muted pull-right">' + date + '</span>  </span></div></div>');
+    }
 
     $("#divusers").append(code);
-
 }
