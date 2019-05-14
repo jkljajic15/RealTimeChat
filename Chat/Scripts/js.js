@@ -5,7 +5,6 @@
     registerClientMethods(chatHub);
     $.connection.hub.start().done(function () {
         $.connection.hub.logging = true;
-        //console.log("test");
         registerEvents(chatHub);
 
     });
@@ -15,7 +14,6 @@
 function registerEvents(chatHub) {
 
     let name = $("#username").attr('data-value');
-    //console.log(name);
 
     if (name != null) {
         if (name.length > 0) {
@@ -28,58 +26,50 @@ function registerEvents(chatHub) {
 
 function registerClientMethods(chatHub) {
 
-    chatHub.client.onConnected = function (id, userName, sviKorisnici, vreme) {
-
-        //console.log(userName, sviKorisnici, vreme);
+    chatHub.client.onConnected = function (sviKorisnici) {
 
         for (i = 0; i < sviKorisnici.length; i++) {
-            //console.log(sviKorisnici[i].UserName);
-            AddUser(sviKorisnici[i].KonekcijaId, sviKorisnici[i].UserName, sviKorisnici[i].LoginTime);
+            AddUser(sviKorisnici[i].KonekcijaId, sviKorisnici[i].UserName);
         }
     }
 
-    // On New User Connected
-    chatHub.client.onNewUserConnected = function (id, name, loginDate) {
-        //console.log("onNewUserConnected", name, loginDate);
-        AddUser(id, name, loginDate);
+    chatHub.client.onNewUserConnected = function (id, name) {
+        AddUser(id, name);
     }
 
-    // On User Disconnected
-    chatHub.client.onUserDisconnected = function (id, userName) {
+
+    chatHub.client.onUserDisconnected = function (id, name) {
 
         $('#Div' + id).remove();
 
-        //var ctrId = 'private_' + id;
-        //$('#' + ctrId).remove();
-
-
-        var disc = $('<div class="disconnect">"' + userName + '" logged off.</div>');
+        let disc = $('<div class="list-group-item">"' + name + '" logged off.</div>');
 
         $(disc).hide();
         $('#divusers').prepend(disc);
-        $(disc).fadeIn(200).delay(1000).fadeOut(200);
+        $(disc).fadeIn(200).delay(2000).fadeOut(200);
 
     }
 }
 
-function AddUser(id, name, date) {
-
-    //console.log("AddUser");
+function AddUser(id, name) {
 
     let thisName = $("#username").attr('data-value');
 
-    if (thisName == name) {
+    if (thisName != name) {
 
         code = $('<div class="box-comment" id="Div' + id + '">' +
-            ' <div class="list-group-item">' +
-            '<span class="username">' + name + '</span >'+
-            '<span class="text-muted pull-right">' + date + '</span></div></div>');
-    } else {
-        code = $('<div class="box-comment" id="Div' + id + '">' +
-            ' <div class="list-group-item list-group-item-action">' +
-            '<span class="username">' + '<a href="#"id="' + name + '" class="user" >' + name + '<a>' +
-            '<span class="text-muted pull-right">' + date + '</span>  </span></div></div>');
-    }
+            ' <div class="user">' +
+            '<span class="username">' + '<a href="#"id="' + name + '" class="list-group-item list-group-item-action" >' + name + '<a>' +
+            '</span></div></div>');
+    } 
+
+    $(code).click(function () {
+
+        if (thisName != name) {
+            alert(name);
+            // funkcija koja ce otvoriti chat klikom na odabranog ulogovanog korisnika
+        }
+    });
 
     $("#divusers").append(code);
 }

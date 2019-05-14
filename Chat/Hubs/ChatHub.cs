@@ -12,7 +12,6 @@ namespace Chat.Hubs
         {
             public string KonekcijaId { get; set; }
             public string UserName { get; set; }
-            public string LoginTime { get; set; }
         }
 
         static List<Korisnici> KonektovaniKorisnici = new List<Korisnici>();
@@ -23,12 +22,11 @@ namespace Chat.Hubs
 
             if (KonektovaniKorisnici.Count(x => x.KonekcijaId == id) == 0)
             {
-                string logintime = DateTime.Now.ToString();
-                KonektovaniKorisnici.Add(new Korisnici { KonekcijaId = id, UserName = userName, LoginTime = logintime });
+                KonektovaniKorisnici.Add(new Korisnici { KonekcijaId = id, UserName = userName });
 
-                Clients.Caller.onConnected(id, userName, KonektovaniKorisnici, logintime);
+                Clients.Caller.onConnected(KonektovaniKorisnici);
 
-                Clients.AllExcept(id).onNewUserConnected(id, userName, logintime);
+                Clients.AllExcept(id).onNewUserConnected(id, userName);
             }
         }
 
