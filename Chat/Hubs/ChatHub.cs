@@ -30,6 +30,23 @@ namespace Chat.Hubs
             }
         }
 
+        public void sendMessage(string name,string message)
+        {
+            var posiljalacId = Context.ConnectionId;
+            var posiljalac = KonektovaniKorisnici.Find(k => k.KonekcijaId == posiljalacId);
+            var posiljalacIme = posiljalac.UserName;
+
+            var primalac = KonektovaniKorisnici.Find(k => k.UserName == name);
+            var primalacId = primalac.KonekcijaId;
+            var primalacIme = primalac.UserName;
+
+            if(posiljalacId != null && primalacId != null)
+            {
+                Clients.Client(primalacId).displayMessage(posiljalacIme,message, posiljalacIme);
+                Clients.Caller.displayMessage(posiljalacIme, message,primalacIme);
+            }
+        }
+
         public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
         {
             var item = KonektovaniKorisnici.FirstOrDefault(x => x.KonekcijaId == Context.ConnectionId);

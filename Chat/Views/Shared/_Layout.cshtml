@@ -34,10 +34,12 @@
     </div>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Real Time Chat Application</p>
-        </footer>
+        <div style="bottom:0;position: fixed;width:100%;">
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - Real Time Chat Application</p>
+            </footer>
+        </div>
     </div>
 
     @Scripts.Render("~/bundles/jquery")

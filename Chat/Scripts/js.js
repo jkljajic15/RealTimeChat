@@ -42,7 +42,7 @@ function registerClientMethods(chatHub) {
 
         $('#Div' + id).remove();
 
-        let disc = $('<div class="list-group-item">"' + name + '" logged off.</div>');
+        let disc = $('<div class="list-group-item">"' + name + '" je offline.</div>');
 
         $(disc).hide();
         $('#divusers').prepend(disc);
@@ -57,19 +57,67 @@ function AddUser(id, name) {
 
     if (thisName != name) {
 
-        code = $('<div class="box-comment" id="Div' + id + '">' +
-            ' <div class="user">' +
-            '<span class="username">' + '<a href="#"id="' + name + '" class="list-group-item list-group-item-action" >' + name + '<a>' +
+        code = $('<div id="Div' + id + '">' +
+            ' <div >' +
+            '<span >' + '<a id="' + name + '" class="list-group-item list-group-item-action" >' + name + '<a>' +
             '</span></div></div>');
     } 
-
+    
     $(code).click(function () {
 
         if (thisName != name) {
-            alert(name);
-            // funkcija koja ce otvoriti chat klikom na odabranog ulogovanog korisnika
+
+            openChatBox(name);
         }
     });
 
     $("#divusers").append(code);
+    
+}
+
+function openChatBox(name) {
+
+    let div =
+        '<div class="col-md-4 " id ="chat-'+name+'">'+
+            
+                '<h3> '+name+' </h3>'+
+            
+                '<div id="divMessage" style="border:1px solid black;height:100px;width:300px;"></div>'+
+            
+            '<div >'+
+                '<input type="text" id="txtPrivateMessage'+name+'" name="message" placeholder="Type Message ..."  />'+
+                '<span><input type="button" id="btnSendMessage'+name+'" value="send"/></span>'+
+            '</div>' +
+        '</div >';
+
+
+    let chatBox = $(div);
+    $('#glavniRed').append(chatBox);
+
+    $('#btnSendMessage'+name).click(function () {
+        
+        let msg = $('#txtPrivateMessage'+name).val();
+
+        if (msg.length > 0) {
+            $.connection.chatHub.server.sendMessage(name, msg);
+        }
+        
+        
+        
+    });
+
+}
+
+$.connection.chatHub.client.displayMessage = function (userName, message,chatIme) {
+
+    let chatDiv = '#chat-' + chatIme;
+    let nadjiChatBox = $(chatDiv).length;
+    
+    if (nadjiChatBox == 0) {
+        openChatBox(chatIme);
+        
+    }
+
+    $(chatDiv).find("#divMessage").append(userName + ': ' + message + '<br>');
+   
 }
