@@ -82,11 +82,11 @@ function openChatBox(name) {
             
                 '<h3> '+name+' </h3>'+
             
-                '<div id="divMessage" style="border:1px solid black;height:100px;width:300px;"></div>'+
+                '<div id="divMessage" style="border:2px solid lightblue;height:300px;width:100%;overflow: scroll;border-radius: 4px;"></div>'+
             
             '<div >'+
-                '<input type="text" id="txtPrivateMessage'+name+'" name="message" placeholder="Type Message ..."  />'+
-                '<span><input type="button" id="btnSendMessage'+name+'" value="send"/></span>'+
+                '<input style="border:2px solid lightblue;height:80px;width:100%;overflow: auto;border-radius: 4px;" type="text" id="txtPrivateMessage'+name+'" name="message" placeholder="Type Message ..."  />'+
+        '<span><input style="height:80px; width:60px; background-color: lightblue; color: black;border: 2px solid lightblue;border-radius: 4px;" type="button" id="btnSendMessage'+name+'" value="send"/></span>'+
             '</div>' +
         '</div >';
 
@@ -100,6 +100,8 @@ function openChatBox(name) {
 
         if (msg.length > 0) {
             $.connection.chatHub.server.sendMessage(name, msg);
+            //document.getElementById("txtPrivateMessage" + name).innerHTML = "";
+            $('#txtPrivateMessage' + name).val(null);
         }
         
         
