@@ -20,8 +20,7 @@ function registerEvents(chatHub) {
             chatHub.server.connect(name);
         }
     }
-
-
+    
 }
 
 function registerClientMethods(chatHub) {
@@ -86,18 +85,26 @@ function isEmpty(obj) {
 }
 function openChatBox(name) {
 
+   
     let div =
-        '<div class="col-md-4 " id ="chat-'+name+'">'+
-            
-        '<h3> ' + name + ' </h3>' + '<button class="close-div" style="float:right;background - color: lightred;-moz - border - radius: 11px;-webkit - border - radius: 11px;border - radius: 11px;display: inline - block; cursor: pointer;color: black;font - family: Arial;font - size: 16px;padding: 2px 7px;text - decoration: none;text - shadow: 0px 1px 0px #2f6627;">X</button>' +
+        '<div class="col-md-4 " id ="chat-' + name + '">' +
+
+        '<h3> ' + name + ' </h3>'
+
+        + '<button id="show" style="background-color:#d6d3d3;border-radius:5px;">Show</button>'
+        + '<div class= "to-hide" >' + '<button id="hide" style="background-color:#d6d3d3;border-radius:5px;">Hide</button>'
+
+        + '<button class="close-div" style="float:right;background-color:#d6d3d3;border-radius:30px;display:inline-block;cursor:pointer;color:black;padding:2px 7px;">X</button>' +
             
                 '<div id="divMessage" style="border:2px solid lightblue;height:300px;width:100%;overflow: scroll;border-radius: 4px;"></div>'+
             
-            '<div >'+
+                '<div >'+
                 '<input style="border:2px solid lightblue;height:80px;width:100%;overflow: auto;border-radius: 4px;" type="text" id="txtPrivateMessage'+name+'" name="message" placeholder="Type Message ..."  />'+
         '<span><input style="height:80px; width:60px; background-color: lightblue; color: black;border: 2px solid lightblue;border-radius: 4px;" type="button" id="btnSendMessage'+name+'" value="send"/></span>'+
-            '</div>' +
-        '</div >';
+        '</div>' +
+           '</div >' +
+                '</div>';
+
     
     //$(".close-div").on("click", function (event) {
     //    $("#chat -"+name).remove();
@@ -109,9 +116,18 @@ function openChatBox(name) {
 
 
     $('.close-div').click(function () {
-        $(this).parent().remove();
+        $(this).parent().parent().remove();
     });
 
+  
+    $(document).ready(function () {
+        $("#hide").click(function () {
+            $(this).parent().hide();
+        });
+        $("#show").click(function () {
+            $(this).next().show();
+        });
+    });
 
 
     $('#btnSendMessage'+name).click(function () {
@@ -120,12 +136,9 @@ function openChatBox(name) {
 
         if (msg.length > 0) {
             $.connection.chatHub.server.sendMessage(name, msg);
-            //document.getElementById("txtPrivateMessage" + name).innerHTML = "";
             $('#txtPrivateMessage' + name).val(null);
         }
-        
-        
-        
+         
     });
 
 }
