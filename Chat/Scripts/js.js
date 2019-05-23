@@ -65,7 +65,9 @@ function AddUser(id, name) {
     
     $(code).click(function () {
 
-        if (thisName != name) {
+        var x = $("#chat-" + name);
+
+        if (thisName != name && (isEmpty(x)|| x == null)) {
 
             openChatBox(name);
         }
@@ -75,12 +77,19 @@ function AddUser(id, name) {
     
 }
 
+function isEmpty(obj) {
+    for (var key in obj) {
+        if (obj.hasOwnProperty(key))
+            return false;
+    }
+    return true;
+}
 function openChatBox(name) {
 
     let div =
         '<div class="col-md-4 " id ="chat-'+name+'">'+
             
-                '<h3> '+name+' </h3>'+
+        '<h3> ' + name + ' </h3>' + '<button class="close-div" style="float:right;background - color: lightred;-moz - border - radius: 11px;-webkit - border - radius: 11px;border - radius: 11px;display: inline - block; cursor: pointer;color: black;font - family: Arial;font - size: 16px;padding: 2px 7px;text - decoration: none;text - shadow: 0px 1px 0px #2f6627;">X</button>' +
             
                 '<div id="divMessage" style="border:2px solid lightblue;height:300px;width:100%;overflow: scroll;border-radius: 4px;"></div>'+
             
@@ -89,10 +98,21 @@ function openChatBox(name) {
         '<span><input style="height:80px; width:60px; background-color: lightblue; color: black;border: 2px solid lightblue;border-radius: 4px;" type="button" id="btnSendMessage'+name+'" value="send"/></span>'+
             '</div>' +
         '</div >';
-
+    
+    //$(".close-div").on("click", function (event) {
+    //    $("#chat -"+name).remove();
+    //    event.preventDefault();
+    //});
 
     let chatBox = $(div);
     $('#glavniRed').append(chatBox);
+
+
+    $('.close-div').click(function () {
+        $(this).parent().remove();
+    });
+
+
 
     $('#btnSendMessage'+name).click(function () {
         
