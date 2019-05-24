@@ -1,6 +1,6 @@
 ﻿$(function () {
 
-    var chatHub = $.connection.chatHub;
+    let chatHub = $.connection.chatHub;
 
     registerClientMethods(chatHub);
     $.connection.hub.start().done(function () {
@@ -156,3 +156,33 @@ $.connection.chatHub.client.displayMessage = function (userName, message,chatIme
     $(chatDiv).find("#divMessage").append(userName + ': ' + message + '<br>');
    
 }
+
+$('#btnGrupa').click(function () {
+    //alert("cao");
+    console.log('click');
+    let grp = '<div class="col-md-4" style="border:1px solid" id="divGrp">'+
+                    '<h3> Grupa 1</h3 >'+
+                    '<ul id="ulGrupa" style="border:1px solid"></ul>'+
+                    '<input type="text" id="txtGroupMessage" />'+
+                    '<span><input type="button" id="btnSendGroupMessage" value="send"/></span>'+
+            '</div > ';
+    let divGrp = $(grp);
+    $("#glavniRed").append(divGrp);
+    //$("#ulGrupa").append('<li>1</li>');
+    $.connection.chatHub.server.addToGroup('Grupa 1');
+    $('#btnSendGroupMessage').click(function () {
+
+        //let msg = $("txtGroupMessage").val();
+        let msg = $(divGrp).find("#txtGroupMessage").val();
+        console.log(msg);
+        $.connection.chatHub.server.sendMessageToGroup(msg,'Grupa 1');
+        
+    });
+
+
+    
+});
+
+$.connection.chatHub.client.addMessage = function (name, msg, grp) {
+    $("#ulGrupa").append('<li>' + grp + '-' + name + ': ' + msg + '</li>');
+};

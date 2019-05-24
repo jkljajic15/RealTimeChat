@@ -60,5 +60,20 @@ namespace Chat.Hubs
             }
             return base.OnDisconnected(stopCalled);
         }
+
+        public void AddToGroup(string grpName)
+        {
+            Groups.Add(Context.ConnectionId, grpName);
+
+            
+        }
+
+        public void SendMessageToGroup(string msg, string grpName)
+        {
+            var name = Context.User.Identity.Name;
+
+            Clients.Group(grpName).addMessage(name, msg, grpName);
+        }
+
     }
 }
