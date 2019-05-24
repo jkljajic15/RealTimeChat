@@ -141,10 +141,10 @@ function openChatBox(name) {
   
     $(document).ready(function () {
         $("#hide").click(function () {
-            $(this).parent().hide();
+            $('.to-hide').hide();
         });
         $("#show").click(function () {
-            $(this).next().show();
+            $('.to-hide').show();
         });
     });
 
