@@ -175,3 +175,5 @@ $.connection.chatHub.client.displayMessage = function (userName, message,chatIme
     $(chatDiv).find("#divMessage").append(userName + ': ' + message + '<br>');
    
 }
+
+//milos
