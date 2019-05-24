@@ -1,0 +1,53 @@
+﻿
+
+
+/*.submitButton {
+    background-color: #d7e5e4;
+    border: #5f9482 solid 1px;
+    padding: 4px;
+    cursor: pointer;
+}
+
+    .submitButton:hover {
+        background-color: #e1e1e1;
+    }*/
+
+
+
+.chatRoom {
+    width: 353px;
+    border: solid 1px gray;
+    float: right;
+}
+
+    .chatRoom .title {
+        font-size: 16px;
+        font-weight: bold;
+        padding: 8px;
+        background-color: #d7e5e4;
+        border-bottom: solid 1px #5f9482;
+    }
+
+    .chatRoom .content {
+        height: 300px;
+        clear: both;
+    }
+
+        .chatRoom .content .chatWindow {
+            float: right;
+            width: 350px;
+            height: 550px;
+            overflow-y: scroll;
+            overflow-x: scroll;
+        }
+
+/
+
+.messageBar {
+    border-top: solid 1px gray;
+    padding: 4px;
+}
+
+.chatRoom .textbox {
+    width: 1050px;
+}

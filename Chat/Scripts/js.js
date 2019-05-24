@@ -13,6 +13,15 @@
 
 function registerEvents(chatHub) {
 
+    $('#btnSendMsg').click(function () {
+
+        var msg = $("#txtMessage").val();
+
+        var name = $('#hdUserName').val();
+        chatHub.server.sendMessageToAll(name, msg);
+        $("#txtMessage").val('');
+    });
+
     let name = $("#username").attr('data-value');
 
     if (name != null) {
@@ -24,6 +33,10 @@ function registerEvents(chatHub) {
 }
 
 function registerClientMethods(chatHub) {
+
+    chatHub.client.messageReceived = function (name, message) {
+        AddMessage(name, message);
+    }
 
     chatHub.client.onConnected = function (sviKorisnici) {
 
@@ -82,6 +95,12 @@ function isEmpty(obj) {
             return false;
     }
     return true;
+}
+function AddMessage(name, message) {
+    $('#divChatWindow').append('<div class="message"><span class="userName">' + name + '</span>: ' + message + '</div>');
+
+    var height = $('#divChatWindow')[0].scrollHeight;
+    $('#divChatWindow').scrollTop(height);
 }
 function openChatBox(name) {
 

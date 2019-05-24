@@ -2,23 +2,49 @@
     ViewBag.Title = "Chat";
 }
 @*<h2>@ViewBag.Title.</h2>
-<h3>@ViewBag.Message</h3>*@
+    <h3>@ViewBag.Message</h3>*@
 
 <div class="container">
 
     <div class="row" id="glavniRed">
-        
-        <div class="col-md-4" >
-            <div >
 
-                <div >
-                    <h3 >Ulogovani Korisnici </h3>
+        <div class="col-md-4">
+            <div>
+
+                <div>
+                    <h3>Ulogovani Korisnici </h3>
                 </div>
 
                 <div id="divusers"></div>
             </div>
         </div>
-        
+        <div class="col-md-4">
+        </div>
+
+        <div class="col-md-4">
+
+
+
+            <div class="chatRoom">
+                <div class="title">
+                    Grupni chat
+                    <div id="divusers"></div>
+                </div>
+                <div class="content">
+                    <div id="divChatWindow" class="chatWindow">
+                    </div>
+
+                </div>
+                <div class="messageBar">
+                    <input class="textbox" type="text" id="txtMessage" />
+                    <input id="btnSendMsg" type="button" value="Send" class="submitButton" />
+                </div>
+
+
+
+                @*<input id="hdUserName" type="hidden" />*@
+            </div>
+        </div>
 
     </div>
 
@@ -29,4 +55,5 @@
     <script src="~/Scripts/jquery.signalR-2.4.1.min.js"></script>
     <script src="~/SignalR/js"></script>
     <script src="~/Scripts/js.js"></script>
+    <link href="~/Css/Css.css" rel="stylesheet" />
 }

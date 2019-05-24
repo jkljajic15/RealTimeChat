@@ -8,6 +8,11 @@ namespace Chat.Hubs
 {
     public class ChatHub : Hub
     {
+        public void SendMessageToAll(string name, string message)
+        {
+            // Broad cast message
+            Clients.All.messageReceived(name, message);
+        }
         public class Korisnici
         {
             public string KonekcijaId { get; set; }
