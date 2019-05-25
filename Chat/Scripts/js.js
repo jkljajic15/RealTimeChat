@@ -15,12 +15,13 @@ function registerEvents(chatHub) {
 
     $('#btnSendMsg').click(function () {
 
-        var msg = $("#txtMessage").val();
+        let msg = $("#txtMessage").val();
 
-        var name = $('#hdUserName').val();
+        
         chatHub.server.sendMessageToAll(name, msg);
         $("#txtMessage").val('');
     });
+
 
     let name = $("#username").attr('data-value');
 
@@ -175,3 +176,17 @@ $.connection.chatHub.client.displayMessage = function (userName, message,chatIme
     $(chatDiv).find("#divMessage").append(userName + ': ' + message + '<br>');
    
 }
+
+
+//Unosenje poruka preko entera
+$("#txtMessage").keypress(function (e) {
+    if (e.which == 13) {
+        $('#btnSendMsg').click();
+    }
+});
+//Unosenje poruka preko entera
+$("#txtPrivateMessage").keypress(function (e) {
+    if (e.which == 13) {
+        $('#btnSendMessage').click();
+    }
+});

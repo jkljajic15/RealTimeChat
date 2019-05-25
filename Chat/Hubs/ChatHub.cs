@@ -10,7 +10,7 @@ namespace Chat.Hubs
     {
         public void SendMessageToAll(string name, string message)
         {
-            // Broad cast message
+            
             Clients.All.messageReceived(name, message);
         }
         public class Korisnici
