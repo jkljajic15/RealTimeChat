@@ -175,3 +175,10 @@ $.connection.chatHub.client.displayMessage = function (userName, message,chatIme
     $(chatDiv).find("#divMessage").append(userName + ': ' + message + '<br>');
    
 }
+
+//Unosenje poruka preko entera
+$("#txtMessage").keypress(function (e) {
+    if (e.which == 13) {
+        $('#btnSendMsg').click();
+    }
+});
