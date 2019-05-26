@@ -8,11 +8,6 @@ namespace Chat.Hubs
 {
     public class ChatHub : Hub
     {
-        public void SendMessageToAll(string name, string message)
-        {
-            
-            Clients.All.messageReceived(name, message);
-        }
         public class Korisnici
         {
             public string KonekcijaId { get; set; }
@@ -29,6 +24,11 @@ namespace Chat.Hubs
         static List<Korisnici> KonektovaniKorisnici = new List<Korisnici>();
         static List<Poruke> ListaPoruka = new List<Poruke>();
 
+        public void SendMessageToAll(string name, string message)
+        {
+
+            Clients.All.messageReceived(name, message);
+        }
         public void Connect(string userName)
         {
             var id = Context.ConnectionId;
@@ -37,6 +37,7 @@ namespace Chat.Hubs
             {
                 KonektovaniKorisnici.Add(new Korisnici { KonekcijaId = id, UserName = userName });
 
+                // Remote Procedure Calls, server-push
                 Clients.Caller.onConnected(KonektovaniKorisnici);
 
                 Clients.AllExcept(id).onNewUserConnected(id, userName);
@@ -113,8 +114,8 @@ namespace Chat.Hubs
                         select x;
 
             Clients.Caller.UcitajPorukeIzKesa(lista);
-            //Clients.Client(primalacId).UcitajPorukeIzKesa(lista);
+            
         }
     }
-    //x => x.UserName == posiljalacIme && y => y.Primalac == name && z => z.UserName == name && l => l.Primalac == posiljalacIme
+    
 }
