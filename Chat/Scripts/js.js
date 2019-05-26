@@ -184,9 +184,3 @@ $("#txtMessage").keypress(function (e) {
         $('#btnSendMsg').click();
     }
 });
-//Unosenje poruka preko entera
-$("#txtPrivateMessage").keypress(function (e) {
-    if (e.which == 13) {
-        $('#btnSendMessage').click();
-    }
-});
