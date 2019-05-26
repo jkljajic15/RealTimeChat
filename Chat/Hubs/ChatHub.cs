@@ -19,7 +19,15 @@ namespace Chat.Hubs
             public string UserName { get; set; }
         }
 
+        public class Poruke
+        {
+            public string UserName { get; set; }
+            public string SadrzajPoruke { get; set; }
+            public string Primalac { get; set; }
+        }
+
         static List<Korisnici> KonektovaniKorisnici = new List<Korisnici>();
+        static List<Poruke> ListaPoruka = new List<Poruke>();
 
         public void Connect(string userName)
         {
@@ -35,7 +43,7 @@ namespace Chat.Hubs
             }
         }
 
-        public void sendMessage(string name,string message)
+        public void sendMessage(string name, string message)
         {
             var posiljalacId = Context.ConnectionId;
             var posiljalac = KonektovaniKorisnici.Find(k => k.KonekcijaId == posiljalacId);
@@ -45,11 +53,15 @@ namespace Chat.Hubs
             var primalacId = primalac.KonekcijaId;
             var primalacIme = primalac.UserName;
 
-            if(posiljalacId != null && primalacId != null)
+            if (posiljalacId != null && primalacId != null)
             {
-                Clients.Client(primalacId).displayMessage(posiljalacIme,message, posiljalacIme);
-                Clients.Caller.displayMessage(posiljalacIme, message,primalacIme);
+                Clients.Client(primalacId).displayMessage(posiljalacIme, message, posiljalacIme);
+                Clients.Caller.displayMessage(posiljalacIme, message, primalacIme);
+
+                DodajPorukeUKes(posiljalacIme, message, primalacIme);
             }
+
+
         }
 
         public override System.Threading.Tasks.Task OnDisconnected(bool stopCalled)
@@ -65,5 +77,44 @@ namespace Chat.Hubs
             }
             return base.OnDisconnected(stopCalled);
         }
+
+        public void AddToGroup(string grpName)
+        {
+            Groups.Add(Context.ConnectionId, grpName);
+
+
+        }
+
+        public void SendMessageToGroup(string msg, string grpName)
+        {
+            var name = Context.User.Identity.Name;
+
+            Clients.Group(grpName).addMessageToGroup(name, msg, grpName);
+        }
+
+
+
+        private void DodajPorukeUKes(string usr, string msg, string primalac)
+        {
+            ListaPoruka.Add(new Poruke { UserName = usr, SadrzajPoruke = msg, Primalac = primalac });
+        }
+
+        public void PorukeIzKesa(string name)
+        {
+            var posiljalacId = Context.ConnectionId;
+            var posiljalac = KonektovaniKorisnici.Find(k => k.KonekcijaId == posiljalacId);
+            var posiljalacIme = posiljalac.UserName;
+
+            var primalac = KonektovaniKorisnici.Find(k => k.UserName == name);
+            var primalacId = primalac.KonekcijaId;
+
+            var lista = from x in ListaPoruka
+                        where x.UserName == posiljalacIme && x.Primalac == name || x.UserName == name && x.Primalac == posiljalacIme
+                        select x;
+
+            Clients.Caller.UcitajPorukeIzKesa(lista);
+            //Clients.Client(primalacId).UcitajPorukeIzKesa(lista);
+        }
     }
+    //x => x.UserName == posiljalacIme && y => y.Primalac == name && z => z.UserName == name && l => l.Primalac == posiljalacIme
 }

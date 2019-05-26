@@ -1,6 +1,6 @@
 ﻿$(function () {
 
-    var chatHub = $.connection.chatHub;
+    let chatHub = $.connection.chatHub;
 
     registerClientMethods(chatHub);
     $.connection.hub.start().done(function () {
@@ -43,6 +43,7 @@ function registerClientMethods(chatHub) {
         for (i = 0; i < sviKorisnici.length; i++) {
             AddUser(sviKorisnici[i].KonekcijaId, sviKorisnici[i].UserName);
         }
+
     }
 
     chatHub.client.onNewUserConnected = function (id, name) {
@@ -57,7 +58,7 @@ function registerClientMethods(chatHub) {
         let disc = $('<div class="list-group-item">"' + name + '" je offline.</div>');
 
         $(disc).hide();
-        $('#divusers').prepend(disc);
+        $('#divusers').append(disc);
         $(disc).fadeIn(200).delay(2000).fadeOut(200);
 
     }
@@ -70,9 +71,8 @@ function AddUser(id, name) {
     if (thisName != name) {
 
         code = $('<div id="Div' + id + '">' +
-            ' <div >' +
-            '<span >' + '<a id="' + name + '" class="list-group-item list-group-item-action" >' + name + '<a>' +
-            '</span></div></div>');
+            '<a id="' + name + '" class="list-group-item list-group-item-action" >' + name + '<a>' +
+            '</div>');
     } 
     
     $(code).click(function () {
@@ -80,7 +80,7 @@ function AddUser(id, name) {
         var x = $("#chat-" + name);
 
         if (thisName != name && (isEmpty(x)|| x == null)) {
-
+            $.connection.chatHub.server.porukeIzKesa(name);
             openChatBox(name);
         }
     });
@@ -166,7 +166,6 @@ $.connection.chatHub.client.displayMessage = function (userName, message,chatIme
 
     let chatDiv = '#chat-' + chatIme;
     let nadjiChatBox = $(chatDiv).length;
-    
     if (nadjiChatBox == 0) {
         openChatBox(chatIme);
         
@@ -182,3 +181,46 @@ $("#txtMessage").keypress(function (e) {
         $('#btnSendMsg').click();
     }
 });
+}
+
+$('#btnGrupa').click(function () {
+
+    let grp = '<div class="col-md-4"  id="divGrp">'+
+                    '<h3> Grupa 1</h3 >' +
+                    '<ul id="ulGrupa" ></ul>'+
+                    '<input type="text" id="txtGroupMessage" />'+
+                    '<span><input type="button" id="btnSendGroupMessage" value="send"/></span>' +
+            '</div > ';
+    let divGrp = $(grp);
+    $("#glavniRed").append(divGrp);
+
+    $.connection.chatHub.server.addToGroup('Grupa 1');
+    $('#btnSendGroupMessage').click(function () {
+
+        let msg = $(divGrp).find("#txtGroupMessage").val();
+        $.connection.chatHub.server.sendMessageToGroup(msg,'Grupa 1');
+        
+    });
+
+
+    
+});
+
+$.connection.chatHub.client.addMessageToGroup = function (name, msg, grp) {
+    $("#ulGrupa").append('<li>' + grp + '-' + name + ': ' + msg + '</li>');
+};
+
+
+$.connection.chatHub.client.UcitajPorukeIzKesa = function (lista) {
+    for (var i = 0; i < lista.length; i++) {
+        DodajPorukeIzListe(lista[i].UserName, lista[i].SadrzajPoruke, lista[i].Primalac);
+    }
+}
+
+function DodajPorukeIzListe(usr,msg,prim) {
+
+    let chatDiv = '#chat-' + prim;
+    let chatDiv2 = '#chat-' + usr;
+    $(chatDiv).find("#divMessage").append(usr + ': ' + msg + '<br>');
+    $(chatDiv2).find("#divMessage").append(usr + ': ' + msg + '<br>');
+}
